@@ -1,0 +1,1 @@
+module.exports = function validationMiddleware(req, res, next) { if (["POST", "PUT", "PATCH"].includes(req.method) && (!req.body || typeof req.body !== "object")) return res.status(400).json({ code: "400", reason: "Bad Request", message: "A JSON request body is required" }); next(); };

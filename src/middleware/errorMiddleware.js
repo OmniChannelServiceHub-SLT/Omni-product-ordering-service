@@ -1,0 +1,1 @@
+module.exports = function errorMiddleware(error, req, res, next) { const status = error.statusCode || 500; res.status(status).json({ code: String(status), reason: status === 500 ? "Internal Server Error" : "Request Failed", message: error.message }); };
