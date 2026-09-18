@@ -21,6 +21,10 @@ const listCustConfirmationRoutes =
     "./APIs/ListCustConfirmation/routes/listCustConfirmationRoutes"
   );
 
+const validateDataTransferSubRoutes = require(
+  "./APIs/createValidateDataTransferSub/routes/validateDataTransferSubRoutes"
+);
+
 const app =
   express();
 
@@ -59,6 +63,10 @@ app.use(
   listCustConfirmationRoutes
 );
 
+app.use(
+  "/tmf-api/productOfferingQualification/v4",
+  validateDataTransferSubRoutes
+);
 
 /*
  * 404 handler
