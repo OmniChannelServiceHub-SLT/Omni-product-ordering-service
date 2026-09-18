@@ -64,8 +64,8 @@ app.use(
 );
 
 app.use(
-  "/tmf-api/productOfferingQualification/v4",
-  validateDataTransferSubRoutes
+    "/tmf-api/productOrderingManagement/v1/productOrder",
+    validateDataTransferSubRoutes
 );
 
 /*
