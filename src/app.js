@@ -25,6 +25,10 @@ const validateDataTransferSubRoutes = require(
   "./APIs/createValidateDataTransferSub/routes/validateDataTransferSubRoutes"
 );
 
+const validateGataGifSubRoutes = require(
+  "./APIs/createValidateGataGifSub/routes/validateGataGifSubRoutes"
+);
+
 const app =
   express();
 
@@ -64,8 +68,13 @@ app.use(
 );
 
 app.use(
-    "/tmf-api/productOrderingManagement/v1/productOrder",
-    validateDataTransferSubRoutes
+  "/tmf-api/productOrderingManagement/v1/productOrder",
+  validateDataTransferSubRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder",
+  validateGataGifSubRoutes
 );
 
 /*
