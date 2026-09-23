@@ -16,6 +16,10 @@ const packageActivationRoutes =
     "./APIs/createPackageActivation/routes/packageActivationRoutes"
   );
 
+const listCustConfirmationRoutes =
+  require(
+    "./APIs/ListCustConfirmation/routes/listCustConfirmationRoutes"
+  );
 
 const app =
   express();
@@ -42,11 +46,17 @@ app.get(
 
 
 app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/package-activation",
+  "/tmf-api/productOrderingManagement/v4/productOrder/package-activation",
 
   validationMiddleware,
 
   packageActivationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder",
+
+  listCustConfirmationRoutes
 );
 
 
