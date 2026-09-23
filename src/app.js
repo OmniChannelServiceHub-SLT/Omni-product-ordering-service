@@ -46,7 +46,7 @@ app.get(
 
 
 app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/package-activation",
+  "/tmf-api/productOrderingManagement/v4/productOrder/package-activation",
 
   validationMiddleware,
 
@@ -54,7 +54,7 @@ app.use(
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder",
+  "/tmf-api/productOrderingManagement/v4/productOrder",
 
   listCustConfirmationRoutes
 );
