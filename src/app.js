@@ -29,6 +29,10 @@ const validateGataGifSubRoutes = require(
   "./APIs/createValidateGataGifSub/routes/validateGataGifSubRoutes"
 );
 
+const validateBBPurchaseRequestRoutes = require(
+  "./APIs/createValidateBBPurchaseRequest/routes/validateBBPurchaseRequestRoutes"
+);
+
 const app =
   express();
 
@@ -75,6 +79,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder",
   validateGataGifSubRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder",
+  validateBBPurchaseRequestRoutes
 );
 
 /*
