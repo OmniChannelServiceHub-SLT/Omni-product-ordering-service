@@ -50,6 +50,10 @@ const confirmPurchaseExtraRoutes = require(
   "./APIs/confirmPurchaseExtra/routes/confirmPurchaseExtraRoutes"
 );
 
+const orderBuyAdvReportsRoutes = require(
+  "./APIs/orderBuyAdvReports/routes/orderBuyAdvReportsRoutes"
+);
+
 const app =
   express();
 
@@ -123,6 +127,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/confirmPurchaseExtra",
   confirmPurchaseExtraRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderBuyAdvReports",
+  orderBuyAdvReportsRoutes
 );
 
 /*
