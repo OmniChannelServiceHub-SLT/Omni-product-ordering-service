@@ -42,6 +42,9 @@ const orderPurchaseExtraGbInitRoutes = require(
   "./APIs/orderPurchaseExtraGbInit/routes/orderPurchaseExtraGbInitRoutes"
 );
 
+const listProductOrderBuyRoutes = require(
+  "./APIs/listProductOrderBuy/routes/listProductOrderBuyRoutes"
+);
 const app =
   express();
 
@@ -105,6 +108,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/orderPurchaseExtraGbInit",
   orderPurchaseExtraGbInitRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/listProductOrderBuy",
+  listProductOrderBuyRoutes
 );
 
 /*
