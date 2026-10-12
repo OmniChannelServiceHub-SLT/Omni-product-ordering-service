@@ -11,9 +11,19 @@ const errorMiddleware =
     "./middleware/errorMiddleware"
   );
 
+const authMiddleware =
+  require(
+    "./middleware/authMiddleware"
+  );
+
 const packageActivationRoutes =
   require(
     "./APIs/createPackageActivation/routes/packageActivationRoutes"
+  );
+
+const redeemVoucherRoutes =
+  require(
+    "./APIs/RedeemVoucher/routes/redeemVoucherRoutes"
   );
 
 
@@ -47,6 +57,17 @@ app.use(
   validationMiddleware,
 
   packageActivationRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/redeem-voucher",
+
+  authMiddleware,
+
+  validationMiddleware,
+
+  redeemVoucherRoutes
 );
 
 
