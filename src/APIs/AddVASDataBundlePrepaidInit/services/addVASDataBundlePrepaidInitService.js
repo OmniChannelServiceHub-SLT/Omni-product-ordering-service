@@ -1,5 +1,7 @@
-const ProductOrder = require(
-  "../../../models/TMF622_ProductOrder"
+const {
+  createOperationProductOrder
+} = require(
+  "../../RedeemVoucher/services/redeemVoucherService"
 );
 
 function firstDefined(...values) {
@@ -104,12 +106,14 @@ function buildProductOrder(input) {
       {
         id: input.subscriberId,
         role: "subscriber",
-        "@type": "RelatedParty"
+        "@type": "RelatedParty",
+        "@referredType": "Individual"
       },
       {
         id: input.commitUser,
         role: "requestor",
-        "@type": "RelatedParty"
+        "@type": "RelatedParty",
+        "@referredType": "Individual"
       }
     ],
     productOrderItem: [
@@ -170,7 +174,7 @@ function buildTmfResponse(savedOrder) {
   return {
     id,
     href:
-      `/tmf-api/productOrderingManagement/v1/productOrder/${id}`,
+      `/tmf-api/productOrderingManagement/v4/productOrder/${id}`,
     externalId: savedOrder.externalId,
     description: savedOrder.description,
     orderDate: savedOrder.createdAt,
@@ -203,7 +207,7 @@ async function orderAddVasBundleInit(
 ) {
   const input = validateInput(data);
   const productOrder = buildProductOrder(input);
-  const savedOrder = await ProductOrder.create(productOrder);
+  const savedOrder = await createOperationProductOrder(productOrder);
 
   if (responseFormat === "legacy") {
     return {

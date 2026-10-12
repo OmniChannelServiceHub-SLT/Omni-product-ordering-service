@@ -70,12 +70,14 @@ function buildValidationResponse(input) {
       {
         id: input.subscriberId,
         role: "sender",
-        "@type": "RelatedParty"
+        "@type": "RelatedParty",
+        "@referredType": "Individual"
       },
       {
         id: input.receiverId,
         role: "receiver",
-        "@type": "RelatedParty"
+        "@type": "RelatedParty",
+        "@referredType": "Individual"
       }
     ],
     "@type": "DataTransferSubscriberValidation"

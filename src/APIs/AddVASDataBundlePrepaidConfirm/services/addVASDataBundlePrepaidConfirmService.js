@@ -159,7 +159,7 @@ function buildTmfResponse(savedOrder) {
   return {
     id,
     href:
-      `/tmf-api/productOrderingManagement/v1/productOrder/${id}`,
+      `/tmf-api/productOrderingManagement/v4/productOrder/${id}`,
     externalId: savedOrder.externalId,
     description: savedOrder.description,
     orderDate: savedOrder.createdAt,

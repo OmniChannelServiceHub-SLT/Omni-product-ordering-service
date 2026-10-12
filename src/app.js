@@ -77,7 +77,12 @@ const app =
 
 
 app.use(
-  express.json()
+  express.json({
+    type: [
+      "application/json",
+      "application/merge-patch+json"
+    ]
+  })
 );
 
 
@@ -210,6 +215,15 @@ app.use(
   validationMiddleware,
 
   transferDataRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder",
+
+  validationMiddleware,
+
+  redeemVoucherRoutes.productOrderRouter
 );
 
 
