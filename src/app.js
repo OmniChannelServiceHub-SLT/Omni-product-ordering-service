@@ -61,6 +61,11 @@ const vasBundleUnsubscriptionRoutes =
     "./APIs/VASBundleUnsubscription/routes/vasBundleUnsubscriptionRoutes"
   );
 
+const validateDataTransferSubRoutes =
+  require(
+    "./APIs/ValidateDataTransferSub/routes/validateDataTransferSubRoutes"
+  );
+
 
 const app =
   express();
@@ -180,6 +185,15 @@ app.use(
   validationMiddleware,
 
   vasBundleUnsubscriptionRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/validate-data-transfer-sub",
+
+  authMiddleware,
+
+  validateDataTransferSubRoutes
 );
 
 
