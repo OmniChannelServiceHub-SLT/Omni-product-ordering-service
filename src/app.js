@@ -51,6 +51,11 @@ const bbPackageChangeRequestRoutes =
     "./APIs/BBPackageChangeRequest/routes/bbPackageChangeRequestRoutes"
   );
 
+const upgradeLoyaltyRoutes =
+  require(
+    "./APIs/UpgradeLoyalty/routes/upgradeLoyaltyRoutes"
+  );
+
 
 const app =
   express();
@@ -148,6 +153,17 @@ app.use(
   validationMiddleware,
 
   bbPackageChangeRequestRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/upgrade-loyalty",
+
+  authMiddleware,
+
+  validationMiddleware,
+
+  upgradeLoyaltyRoutes
 );
 
 
