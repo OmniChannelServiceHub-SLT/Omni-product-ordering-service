@@ -71,6 +71,15 @@ app.use(
 );
 
 
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder",
+
+  validationMiddleware,
+
+  redeemVoucherRoutes.productOrderRouter
+);
+
+
 /*
  * 404 handler
  */

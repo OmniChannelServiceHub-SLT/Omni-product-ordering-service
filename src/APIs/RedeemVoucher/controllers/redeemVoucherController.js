@@ -50,6 +50,20 @@ async function redeemVoucher(req, res, next) {
   }
 }
 
+async function createTmfProductOrder(req, res, next) {
+  try {
+    const result =
+      await redeemVoucherService.createTmfProductOrder(req.body);
+    const body = result.body;
+
+    res.location(body.href);
+    return res.status(result.statusCode).json(body);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
-  redeemVoucher
+  redeemVoucher,
+  createTmfProductOrder
 };

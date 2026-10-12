@@ -2,6 +2,22 @@ const ProductOrder = require(
   "../../../models/TMF622_ProductOrder"
 );
 
+const TMF_PRODUCT_ORDER_PATH =
+  "/tmf-api/productOrderingManagement/v4/productOrder";
+
+const ORDER_ACTIONS = new Set([
+  "add",
+  "modify",
+  "delete",
+  "noChange"
+]);
+
+function badRequest(message) {
+  const error = new Error(message);
+  error.statusCode = 400;
+  return error;
+}
+
 function firstDefined(...values) {
   return values.find(
     (value) => value !== undefined && value !== null
@@ -64,7 +80,8 @@ function buildProductOrder(input) {
       {
         id: input.subscriberId,
         role: "subscriber",
-        "@type": "RelatedParty"
+        "@type": "RelatedParty",
+        "@referredType": "Individual"
       }
     ],
     productOrderItem: [
@@ -114,7 +131,7 @@ function buildTmfResponse(savedOrder) {
   return {
     id,
     href:
-      `/tmf-api/productOrderingManagement/v1/productOrder/${id}`,
+      `${TMF_PRODUCT_ORDER_PATH}/${id}`,
     externalId: savedOrder.externalId,
     description: savedOrder.description,
     orderDate: savedOrder.createdAt,
@@ -122,6 +139,135 @@ function buildTmfResponse(savedOrder) {
     relatedParty: savedOrder.relatedParty || [],
     productOrderItem: savedOrder.productOrderItem || [],
     "@type": "ProductOrder"
+  };
+}
+
+function validateTmfProductOrder(data) {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw badRequest("A ProductOrder JSON object is required");
+  }
+
+  if (
+    !Array.isArray(data.productOrderItem) ||
+    data.productOrderItem.length === 0
+  ) {
+    throw badRequest(
+      "productOrderItem is required and must contain at least one item"
+    );
+  }
+
+  data.productOrderItem.forEach((item, index) => {
+    if (!item || typeof item !== "object" || Array.isArray(item)) {
+      throw badRequest(`productOrderItem[${index}] must be an object`);
+    }
+
+    if (String(item.id ?? "").trim() === "") {
+      throw badRequest(`productOrderItem[${index}].id is required`);
+    }
+
+    if (!ORDER_ACTIONS.has(item.action)) {
+      throw badRequest(
+        `productOrderItem[${index}].action must be add, modify, delete or noChange`
+      );
+    }
+  });
+
+  if (data.relatedParty !== undefined) {
+    if (!Array.isArray(data.relatedParty)) {
+      throw badRequest("relatedParty must be an array");
+    }
+
+    data.relatedParty.forEach((party, index) => {
+      if (!party || typeof party !== "object" || Array.isArray(party)) {
+        throw badRequest(`relatedParty[${index}] must be an object`);
+      }
+
+      if (String(party.id ?? "").trim() === "") {
+        throw badRequest(`relatedParty[${index}].id is required`);
+      }
+
+      if (String(party["@referredType"] ?? "").trim() === "") {
+        throw badRequest(
+          `relatedParty[${index}].@referredType is required`
+        );
+      }
+    });
+  }
+}
+
+function buildTmfProductOrder(data) {
+  const productOrder = JSON.parse(JSON.stringify(data));
+
+  [
+    "id",
+    "href",
+    "orderDate",
+    "state",
+    "createdAt",
+    "updatedAt",
+    "_id",
+    "__v",
+    "legacyOperation",
+    "legacyPayload"
+  ].forEach((field) => delete productOrder[field]);
+
+  productOrder.state = "acknowledged";
+  productOrder.productOrderItem = productOrder.productOrderItem.map(
+    (item) => ({
+      ...item,
+      state: "acknowledged"
+    })
+  );
+  productOrder["@type"] = productOrder["@type"] || "ProductOrder";
+
+  return productOrder;
+}
+
+function buildStandardTmfResponse(savedOrder) {
+  if (!savedOrder || !savedOrder._id) {
+    const error = new Error(
+      "A saved ProductOrder with an id is required"
+    );
+    error.statusCode = 500;
+    throw error;
+  }
+
+  const source = savedOrder.toObject
+    ? savedOrder.toObject({ virtuals: false })
+    : { ...savedOrder };
+  const id = String(savedOrder._id);
+  const orderDate = source.orderDate || savedOrder.createdAt;
+
+  [
+    "id",
+    "href",
+    "orderDate",
+    "createdAt",
+    "updatedAt",
+    "_id",
+    "__v",
+    "legacyOperation",
+    "legacyPayload"
+  ].forEach((field) => delete source[field]);
+
+  return {
+    ...source,
+    id,
+    href: `${TMF_PRODUCT_ORDER_PATH}/${id}`,
+    orderDate,
+    "@type": source["@type"] || "ProductOrder"
+  };
+}
+
+async function createTmfProductOrder(data) {
+  validateTmfProductOrder(data);
+
+  const productOrder = buildTmfProductOrder(data);
+  const savedOrder = await ProductOrder.create(productOrder);
+
+  return {
+    statusCode: 201,
+    body: buildStandardTmfResponse(savedOrder)
   };
 }
 
@@ -164,9 +310,13 @@ async function redeemVoucher(
 
 module.exports = {
   redeemVoucher,
+  createTmfProductOrder,
   normalizeInput,
   validateInput,
   buildProductOrder,
   buildTmfResponse,
-  buildLegacyResponse
+  buildLegacyResponse,
+  validateTmfProductOrder,
+  buildTmfProductOrder,
+  buildStandardTmfResponse
 };
