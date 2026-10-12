@@ -56,6 +56,11 @@ const upgradeLoyaltyRoutes =
     "./APIs/UpgradeLoyalty/routes/upgradeLoyaltyRoutes"
   );
 
+const vasBundleUnsubscriptionRoutes =
+  require(
+    "./APIs/VASBundleUnsubscription/routes/vasBundleUnsubscriptionRoutes"
+  );
+
 
 const app =
   express();
@@ -164,6 +169,17 @@ app.use(
   validationMiddleware,
 
   upgradeLoyaltyRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/vas-bundle-unsubscription",
+
+  authMiddleware,
+
+  validationMiddleware,
+
+  vasBundleUnsubscriptionRoutes
 );
 
 
