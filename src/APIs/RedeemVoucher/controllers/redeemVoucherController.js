@@ -50,6 +50,73 @@ async function redeemVoucher(req, res, next) {
   }
 }
 
+async function createTmfProductOrder(req, res, next) {
+  try {
+    const result =
+      await redeemVoucherService.createTmfProductOrder(req.body);
+    const body = result.body;
+
+    res.location(body.href);
+    return res.status(result.statusCode).json(body);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function listTmfProductOrders(req, res, next) {
+  try {
+    const result =
+      await redeemVoucherService.listTmfProductOrders(req.query);
+
+    res.set("X-Result-Count", String(result.body.length));
+    res.set("X-Total-Count", String(result.totalCount));
+    return res.status(200).json(result.body);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function retrieveTmfProductOrder(req, res, next) {
+  try {
+    const body =
+      await redeemVoucherService.retrieveTmfProductOrder(
+        req.params.id,
+        req.query.fields
+      );
+
+    return res.status(200).json(body);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function updateTmfProductOrder(req, res, next) {
+  try {
+    const body = await redeemVoucherService.updateTmfProductOrder(
+      req.params.id,
+      req.body
+    );
+
+    return res.status(200).json(body);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function deleteTmfProductOrder(req, res, next) {
+  try {
+    await redeemVoucherService.deleteTmfProductOrder(req.params.id);
+    return res.status(204).send();
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
-  redeemVoucher
+  redeemVoucher,
+  createTmfProductOrder,
+  listTmfProductOrders,
+  retrieveTmfProductOrder,
+  updateTmfProductOrder,
+  deleteTmfProductOrder
 };

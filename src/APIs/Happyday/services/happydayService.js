@@ -2,6 +2,9 @@ const ProductOrder = require(
   "../../../models/TMF622_ProductOrder"
 );
 
+const TMF_PRODUCT_ORDER_PATH =
+  "/tmf-api/productOrderingManagement/v4/productOrder";
+
 function firstDefined(...values) {
   return values.find(
     (value) => value !== undefined && value !== null
@@ -101,12 +104,14 @@ function buildProductOrder(input) {
       {
         id: input.subscriberId,
         role: "subscriber",
-        "@type": "RelatedParty"
+        "@type": "RelatedParty",
+        "@referredType": "Individual"
       },
       {
         id: input.commitUser,
         role: "requestor",
-        "@type": "RelatedParty"
+        "@type": "RelatedParty",
+        "@referredType": "Individual"
       }
     ],
     productOrderItem: [
@@ -162,7 +167,7 @@ function buildTmfResponse(savedOrder) {
   return {
     id,
     href:
-      `/tmf-api/productOrderingManagement/v1/productOrder/${id}`,
+      `${TMF_PRODUCT_ORDER_PATH}/${id}`,
     externalId: savedOrder.externalId,
     description: savedOrder.description,
     orderDate: savedOrder.createdAt,
