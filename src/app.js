@@ -54,6 +54,10 @@ const orderBuyAdvReportsRoutes = require(
   "./APIs/orderBuyAdvReports/routes/orderBuyAdvReportsRoutes"
 );
 
+const orderUnsubscribeAdvRoutes = require(
+    "./APIs/orderUnsubscribeAdv/routes/orderUnsubscribeAdvRoutes"
+);
+
 const app =
   express();
 
@@ -132,6 +136,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/orderBuyAdvReports",
   orderBuyAdvReportsRoutes
+);
+
+app.use(
+    "/tmf-api/productOrderingManagement/v4/productOrder/orderUnsubscribeAdv",
+    orderUnsubscribeAdvRoutes
 );
 
 /*
