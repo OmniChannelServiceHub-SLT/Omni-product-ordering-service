@@ -36,6 +36,11 @@ const addVASDataBundlePostPaidRoutes =
     "./APIs/AddVASDataBundlePostPaid/routes/addVASDataBundlePostPaidRoutes"
   );
 
+const addVASDataBundlePrepaidInitRoutes =
+  require(
+    "./APIs/AddVASDataBundlePrepaidInit/routes/addVASDataBundlePrepaidInitRoutes"
+  );
+
 
 const app =
   express();
@@ -100,6 +105,17 @@ app.use(
   validationMiddleware,
 
   addVASDataBundlePostPaidRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/add-vas-data-bundle-prepaid-init",
+
+  authMiddleware,
+
+  validationMiddleware,
+
+  addVASDataBundlePrepaidInitRoutes
 );
 
 
