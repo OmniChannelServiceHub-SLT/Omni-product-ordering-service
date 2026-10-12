@@ -33,6 +33,12 @@ const validateBBPurchaseRequestRoutes = require(
   "./APIs/createValidateBBPurchaseRequest/routes/validateBBPurchaseRequestRoutes"
 );
 
+
+const orderPurchaseExtraGbRoutes = require(
+  "./APIs/orderPurchaseExtraGb/routes/orderPurchaseExtraGbRoutes"
+);
+
+
 const app =
   express();
 
@@ -85,6 +91,13 @@ app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder",
   validateBBPurchaseRequestRoutes
 );
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderPurchaseExtraGb",
+  orderPurchaseExtraGbRoutes
+);
+
 
 /*
  * 404 handler
