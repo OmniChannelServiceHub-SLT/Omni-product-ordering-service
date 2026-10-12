@@ -38,6 +38,9 @@ const orderPurchaseExtraGbRoutes = require(
   "./APIs/orderPurchaseExtraGb/routes/orderPurchaseExtraGbRoutes"
 );
 
+const orderPurchaseExtraGbInitRoutes = require(
+  "./APIs/orderPurchaseExtraGbInit/routes/orderPurchaseExtraGbInitRoutes"
+);
 
 const app =
   express();
@@ -98,6 +101,11 @@ app.use(
   orderPurchaseExtraGbRoutes
 );
 
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderPurchaseExtraGbInit",
+  orderPurchaseExtraGbInitRoutes
+);
 
 /*
  * 404 handler
