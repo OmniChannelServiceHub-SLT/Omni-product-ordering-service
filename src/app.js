@@ -31,6 +31,11 @@ const happydayRoutes =
     "./APIs/Happyday/routes/happydayRoutes"
   );
 
+const addVASDataBundlePostPaidRoutes =
+  require(
+    "./APIs/AddVASDataBundlePostPaid/routes/addVASDataBundlePostPaidRoutes"
+  );
+
 
 const app =
   express();
@@ -84,6 +89,17 @@ app.use(
   validationMiddleware,
 
   happydayRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/add-vas-data-bundle-postpaid",
+
+  authMiddleware,
+
+  validationMiddleware,
+
+  addVASDataBundlePostPaidRoutes
 );
 
 
