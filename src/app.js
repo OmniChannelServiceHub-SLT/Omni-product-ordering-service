@@ -45,6 +45,11 @@ const orderPurchaseExtraGbInitRoutes = require(
 const listProductOrderBuyRoutes = require(
   "./APIs/listProductOrderBuy/routes/listProductOrderBuyRoutes"
 );
+
+const confirmPurchaseExtraRoutes = require(
+  "./APIs/confirmPurchaseExtra/routes/confirmPurchaseExtraRoutes"
+);
+
 const app =
   express();
 
@@ -113,6 +118,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/listProductOrderBuy",
   listProductOrderBuyRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/confirmPurchaseExtra",
+  confirmPurchaseExtraRoutes
 );
 
 /*
