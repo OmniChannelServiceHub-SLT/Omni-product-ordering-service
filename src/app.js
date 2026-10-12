@@ -46,6 +46,11 @@ const addVASDataBundlePrepaidConfirmRoutes =
     "./APIs/AddVASDataBundlePrepaidConfirm/routes/addVASDataBundlePrepaidConfirmRoutes"
   );
 
+const bbPackageChangeRequestRoutes =
+  require(
+    "./APIs/BBPackageChangeRequest/routes/bbPackageChangeRequestRoutes"
+  );
+
 
 const app =
   express();
@@ -132,6 +137,17 @@ app.use(
   validationMiddleware,
 
   addVASDataBundlePrepaidConfirmRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/bb-package-change-request",
+
+  authMiddleware,
+
+  validationMiddleware,
+
+  bbPackageChangeRequestRoutes
 );
 
 
