@@ -66,6 +66,11 @@ const validateDataTransferSubRoutes =
     "./APIs/ValidateDataTransferSub/routes/validateDataTransferSubRoutes"
   );
 
+const transferDataRoutes =
+  require(
+    "./APIs/TransferData/routes/transferDataRoutes"
+  );
+
 
 const app =
   express();
@@ -194,6 +199,17 @@ app.use(
   authMiddleware,
 
   validateDataTransferSubRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/transfer-data",
+
+  authMiddleware,
+
+  validationMiddleware,
+
+  transferDataRoutes
 );
 
 
