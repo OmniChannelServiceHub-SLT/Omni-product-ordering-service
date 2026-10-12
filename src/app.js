@@ -26,6 +26,11 @@ const redeemVoucherRoutes =
     "./APIs/RedeemVoucher/routes/redeemVoucherRoutes"
   );
 
+const happydayRoutes =
+  require(
+    "./APIs/Happyday/routes/happydayRoutes"
+  );
+
 
 const app =
   express();
@@ -68,6 +73,17 @@ app.use(
   validationMiddleware,
 
   redeemVoucherRoutes
+);
+
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/happyday",
+
+  authMiddleware,
+
+  validationMiddleware,
+
+  happydayRoutes
 );
 
 
