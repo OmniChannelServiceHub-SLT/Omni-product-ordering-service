@@ -66,6 +66,10 @@ const validateDataGiftRoutes = require(
     "./APIs/validateDataGift/routes/validateDataGiftRoutes"
 );
 
+const orderDataGiftEnrollInitRoutes = require(
+    "./APIs/orderDataGiftEnrollInit/routes/orderDataGiftEnrollInitRoutes"
+);
+
 const app =
   express();
 
@@ -160,6 +164,12 @@ app.use(
     "/tmf-api/productOrderingManagement/v4/productOrder/validateDataGift",
     validateDataGiftRoutes
 );
+
+app.use(
+    "/tmf-api/productOrderingManagement/v4/productOrder/orderDataGiftEnrollInit",
+    orderDataGiftEnrollInitRoutes
+);
+
 
 /*
  * 404 handler
