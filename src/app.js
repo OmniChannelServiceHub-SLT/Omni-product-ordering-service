@@ -58,6 +58,10 @@ const orderUnsubscribeAdvRoutes = require(
     "./APIs/orderUnsubscribeAdv/routes/orderUnsubscribeAdvRoutes"
 );
 
+const orderDataGiftEnrollRoutes = require(
+    "./APIs/orderDataGiftEnroll/routes/orderDataGiftEnrollRoutes"
+);
+
 const app =
   express();
 
@@ -141,6 +145,11 @@ app.use(
 app.use(
     "/tmf-api/productOrderingManagement/v4/productOrder/orderUnsubscribeAdv",
     orderUnsubscribeAdvRoutes
+);
+
+app.use(
+    "/tmf-api/productOrderingManagement/v4/productOrder/orderDataGiftEnroll",
+    orderDataGiftEnrollRoutes
 );
 
 /*
