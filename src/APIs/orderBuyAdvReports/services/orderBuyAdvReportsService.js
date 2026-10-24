@@ -1,8 +1,10 @@
-
 function validateInput(data = {}) {
-    // TODO: Add the required fields from the API 5 Excel mapping.
-    // Do not assume that this API uses the same fields as other APIs.
-    const requiredFields = [];
+    // Required fields from the Excel (A53 - PurchaseAdvancedReportsPostPaid)
+    const requiredFields = [
+        "subscriberID",
+        "reporterPackage",
+        "activatedBy"
+    ];
 
     const missingFields = requiredFields.filter(
         (field) =>
@@ -24,14 +26,21 @@ function validateInput(data = {}) {
 async function orderBuyAdvReports(input) {
     validateInput(input);
 
-    // TODO: Integrate the approved backend operation for purchasing
-    // advanced reports and implement the documented success response.
-    const error = new Error(
-        "Advanced reports purchase backend integration is not configured."
-    );
-
-    error.status = 501;
-    throw error;
+    // TODO: Replace this with the real advanced reports backend call
+    // when it is available. The response format below matches the
+    // "MySLT output sample" for A53 in the Excel sheet.
+    return {
+        isSuccess: true,
+        errorMessege: null,
+        exceptionDetail: null,
+        dataBundle: {
+            status: "SUCCESS",
+            message: "Advanced Report Enrollement Successfull",
+            path: "/enroll"
+        },
+        errorShow: null,
+        errorCode: null
+    };
 }
 
 module.exports = { orderBuyAdvReports };

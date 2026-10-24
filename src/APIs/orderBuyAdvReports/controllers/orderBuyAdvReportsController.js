@@ -1,9 +1,14 @@
-
 const service = require("../services/orderBuyAdvReportsService");
 
 async function orderBuyAdvReportsController(req, res) {
     try {
-        const result = await service.orderBuyAdvReports(req.body);
+        // Accept inputs from the query string (as in the Excel) or the JSON body
+        const input = {
+            ...(req.query || {}),
+            ...(req.body || {})
+        };
+
+        const result = await service.orderBuyAdvReports(input);
 
         return res.status(200).json(result);
     } catch (error) {
