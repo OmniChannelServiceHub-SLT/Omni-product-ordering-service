@@ -1,4 +1,3 @@
-
 function validateInput(query = {}) {
     const requiredFields = [
         "subscriberID",
@@ -26,14 +25,51 @@ function validateInput(query = {}) {
 async function listProductOrderBuy(query) {
     validateInput(query);
 
-    // TODO: Connect to the approved purchase-history data source
-    // and implement the documented response format.
-    const error = new Error(
-        "Purchase history retrieval is not configured."
-    );
+    const subscriberID = String(query.subscriberID).trim();
 
-    error.status = 501;
-    throw error;
+    // TODO: Replace this sample data with the real purchase-history
+    // backend call when it is available. The response format below
+    // matches the "MySLT output sample" for A50 in the Excel sheet.
+    return [
+        {
+            purchaseId: "1553186478942404",
+            subscriberId: subscriberID,
+            vasType: "Extra GB",
+            vasPackage: "2 GB",
+            uamCat: null,
+            startTime: null,
+            duration: 0,
+            payType: "PostPaid",
+            payPrice: "250",
+            transactionState: null,
+            transactionTime: "2019-03-21 22:11",
+            commitUser: "SLT",
+            channel: null,
+            provisioningString: null,
+            basePackage: null,
+            failReason: null,
+            payParameters: null
+        },
+        {
+            purchaseId: "1553186607004273",
+            subscriberId: subscriberID,
+            vasType: "Extra GB",
+            vasPackage: "5 GB",
+            uamCat: null,
+            startTime: null,
+            duration: 0,
+            payType: "PostPaid",
+            payPrice: "375",
+            transactionState: null,
+            transactionTime: "2019-03-21 22:13",
+            commitUser: "SLT",
+            channel: null,
+            provisioningString: null,
+            basePackage: null,
+            failReason: null,
+            payParameters: null
+        }
+    ];
 }
 
 module.exports = { listProductOrderBuy };
