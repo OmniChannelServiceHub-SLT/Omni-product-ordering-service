@@ -1,267 +1,109 @@
-const express =
-  require("express");
+const express = require("express");
 
-const validationMiddleware =
-  require(
-    "./middleware/validationMiddleware"
-  );
+const authMiddleware = require("./middleware/authMiddleware");
+const errorMiddleware = require("./middleware/errorMiddleware");
+const validationMiddleware = require("./middleware/validationMiddleware");
 
-const errorMiddleware =
-  require(
-    "./middleware/errorMiddleware"
-  );
+const addVASDataBundlePostPaidRoutes = require(
+  "./APIs/AddVASDataBundlePostPaid/routes/addVASDataBundlePostPaidRoutes"
+);
+const addVASDataBundlePrepaidInitRoutes = require(
+  "./APIs/AddVASDataBundlePrepaidInit/routes/addVASDataBundlePrepaidInitRoutes"
+);
+const bbPackageChangeRequestRoutes = require(
+  "./APIs/BBPackageChangeRequest/routes/bbPackageChangeRequestRoutes"
+);
+const listAccountLinkRoutes = require(
+  "./APIs/ListAccountLink/routes/listAccountLinkRoutes"
+);
+const listCustConfirmationRoutes = require(
+  "./APIs/ListCustConfirmation/routes/listCustConfirmationRoutes"
+);
+const packageActivationRoutes = require(
+  "./APIs/createPackageActivation/routes/packageActivationRoutes"
+);
+const upgradeLoyaltyRoutes = require(
+  "./APIs/UpgradeLoyalty/routes/upgradeLoyaltyRoutes"
+);
 
-const authMiddleware =
-  require(
-    "./middleware/authMiddleware"
-  );
-
-const packageActivationRoutes =
-  require(
-    "./APIs/createPackageActivation/routes/packageActivationRoutes"
-  );
-
-const redeemVoucherRoutes =
-  require(
-    "./APIs/RedeemVoucher/routes/redeemVoucherRoutes"
-  );
-
-const happydayRoutes =
-  require(
-    "./APIs/Happyday/routes/happydayRoutes"
-  );
-
-const addVASDataBundlePostPaidRoutes =
-  require(
-    "./APIs/AddVASDataBundlePostPaid/routes/addVASDataBundlePostPaidRoutes"
-  );
-
-const addVASDataBundlePrepaidInitRoutes =
-  require(
-    "./APIs/AddVASDataBundlePrepaidInit/routes/addVASDataBundlePrepaidInitRoutes"
-  );
-
-const addVASDataBundlePrepaidConfirmRoutes =
-  require(
-    "./APIs/AddVASDataBundlePrepaidConfirm/routes/addVASDataBundlePrepaidConfirmRoutes"
-  );
-
-const bbPackageChangeRequestRoutes =
-  require(
-    "./APIs/BBPackageChangeRequest/routes/bbPackageChangeRequestRoutes"
-  );
-
-const upgradeLoyaltyRoutes =
-  require(
-    "./APIs/UpgradeLoyalty/routes/upgradeLoyaltyRoutes"
-  );
-
-const vasBundleUnsubscriptionRoutes =
-  require(
-    "./APIs/VASBundleUnsubscription/routes/vasBundleUnsubscriptionRoutes"
-  );
-
-const validateDataTransferSubRoutes =
-  require(
-    "./APIs/ValidateDataTransferSub/routes/validateDataTransferSubRoutes"
-  );
-
-const transferDataRoutes =
-  require(
-    "./APIs/TransferData/routes/transferDataRoutes"
-  );
-
-
-const app =
-  express();
-
+const app = express();
 
 app.use(
   express.json({
-    type: [
-      "application/json",
-      "application/merge-patch+json"
-    ]
+    type: ["application/json", "application/merge-patch+json"]
   })
 );
 
-
-app.get(
-  "/health",
-  (req, res) => {
-    return res
-      .status(200)
-      .json({
-        status: "UP",
-
-        service:
-          "product-ordering-service"
-      });
-  }
-);
-
+app.get("/health", (req, res) => {
+  return res.status(200).json({
+    status: "UP",
+    service: "product-ordering-service"
+  });
+});
 
 app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/package-activation",
-
   validationMiddleware,
-
   packageActivationRoutes
 );
 
-
-app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/redeem-voucher",
-
-  authMiddleware,
-
-  validationMiddleware,
-
-  redeemVoucherRoutes
-);
-
-
-app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/happyday",
-
-  authMiddleware,
-
-  validationMiddleware,
-
-  happydayRoutes
-);
-
-
 app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/add-vas-data-bundle-postpaid",
-
   authMiddleware,
-
   validationMiddleware,
-
   addVASDataBundlePostPaidRoutes
 );
 
-
 app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/add-vas-data-bundle-prepaid-init",
-
   authMiddleware,
-
   validationMiddleware,
-
   addVASDataBundlePrepaidInitRoutes
 );
 
-
-app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/add-vas-data-bundle-prepaid-confirm",
-
-  authMiddleware,
-
-  validationMiddleware,
-
-  addVASDataBundlePrepaidConfirmRoutes
-);
-
-
 app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/bb-package-change-request",
-
   authMiddleware,
-
   validationMiddleware,
-
   bbPackageChangeRequestRoutes
 );
 
-
 app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/upgrade-loyalty",
-
   authMiddleware,
-
   validationMiddleware,
-
   upgradeLoyaltyRoutes
 );
 
-
 app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/vas-bundle-unsubscription",
-
+  "/tmf-api/productOfferingQualification/v1/productOfferingQualification/account-link",
   authMiddleware,
-
-  validationMiddleware,
-
-  vasBundleUnsubscriptionRoutes
+  listAccountLinkRoutes
 );
 
-
 app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/validate-data-transfer-sub",
-
+  "/tmf-api/productOfferingQualification/v1/productOfferingQualification",
   authMiddleware,
-
-  validateDataTransferSubRoutes
+  validationMiddleware,
+  listCustConfirmationRoutes
 );
 
-
 app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/transfer-data",
-
+  "/tmf-api/productOfferingQualification/v4/productOfferingQualification/account-link",
   authMiddleware,
-
-  validationMiddleware,
-
-  transferDataRoutes
+  listAccountLinkRoutes
 );
 
+app.use((req, res) => {
+  return res.status(404).json({
+    code: "404",
+    reason: "Not Found",
+    message: `Route not found: ${req.method} ${req.originalUrl}`,
+    status: "404",
+    "@type": "Error"
+  });
+});
 
-app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder",
+app.use(errorMiddleware);
 
-  validationMiddleware,
-
-  redeemVoucherRoutes.productOrderRouter
-);
-
-
-/*
- * 404 handler
- */
-
-app.use(
-  (req, res) => {
-    return res
-      .status(404)
-      .json({
-        code: "404",
-
-        reason:
-          "Not Found",
-
-        message:
-          `Route not found: ${req.method} ${req.originalUrl}`,
-
-        status: "404",
-
-        "@type":
-          "Error"
-      });
-  }
-);
-
-
-/*
- * IMPORTANT:
- * Error middleware LAST
- */
-
-app.use(
-  errorMiddleware
-);
-
-
-module.exports =
-  app;
+module.exports = app;

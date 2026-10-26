@@ -5,7 +5,7 @@ const ProductOrder = require(
 const {
   createOperationProductOrder
 } = require(
-  "../../RedeemVoucher/services/redeemVoucherService"
+  "../../../services/productOrderService"
 );
 
 function firstDefined(...values) {
