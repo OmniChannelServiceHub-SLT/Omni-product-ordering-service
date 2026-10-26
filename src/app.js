@@ -25,6 +25,9 @@ const listAccountLinkRoutes = require(
 const listCustConfirmationRoutes = require(
   "./APIs/ListCustConfirmation/routes/listCustConfirmationRoutes"
 );
+const orderPackageRoutes = require(
+  "./APIs/OrderPackage/routes/orderPackageRoutes"
+);
 const packageActivationRoutes = require(
   "./APIs/createPackageActivation/routes/packageActivationRoutes"
 );
@@ -60,6 +63,20 @@ app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/package-activation",
   validationMiddleware,
   packageActivationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/order-package",
+  authMiddleware,
+  validationMiddleware,
+  orderPackageRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/order-package",
+  authMiddleware,
+  validationMiddleware,
+  orderPackageRoutes
 );
 
 app.use(
