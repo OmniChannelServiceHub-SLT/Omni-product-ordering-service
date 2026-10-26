@@ -13,6 +13,9 @@ const addVASDataBundlePrepaidInitRoutes = require(
 const bbPackageChangeRequestRoutes = require(
   "./APIs/BBPackageChangeRequest/routes/bbPackageChangeRequestRoutes"
 );
+const createApplicationLteRoutes = require(
+  "./APIs/CreateApplicationLte/routes/createApplicationLteRoutes"
+);
 const listAccountLinkRoutes = require(
   "./APIs/ListAccountLink/routes/listAccountLinkRoutes"
 );
@@ -73,6 +76,20 @@ app.use(
   authMiddleware,
   validationMiddleware,
   upgradeLoyaltyRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v1/shoppingCart/application-lte",
+  authMiddleware,
+  validationMiddleware,
+  createApplicationLteRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v4/shoppingCart/application-lte",
+  authMiddleware,
+  validationMiddleware,
+  createApplicationLteRoutes
 );
 
 app.use(
