@@ -55,6 +55,10 @@ const retrievePurchaseRoutes = require(
   "./APIs/retrievePurchase/routes/retrievePurchaseRoutes"
 );
 
+const retrieveApplicationRoutes = require(
+  "./APIs/retrieveApplication/routes/retrieveApplicationRoutes"
+);
+
 const app =
   express();
 
@@ -131,6 +135,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/retrievePurchase",
   retrievePurchaseRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/retrieveApplication",
+  retrieveApplicationRoutes
 );
 
 /*
