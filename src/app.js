@@ -31,6 +31,9 @@ const {
 } = require(
   "./APIs/PatchApplicationLte/routes/patchApplicationLteRoutes"
 );
+const retrieveApplicationLteRoutes = require(
+  "./APIs/RetrieveApplicationLte/routes/retrieveApplicationLteRoutes"
+);
 const upgradeLoyaltyRoutes = require(
   "./APIs/UpgradeLoyalty/routes/upgradeLoyaltyRoutes"
 );
@@ -117,6 +120,18 @@ app.use(
   authMiddleware,
   validationMiddleware,
   patchApplicationLteLegacyRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v1/shoppingCart/application-lte",
+  authMiddleware,
+  retrieveApplicationLteRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v4/shoppingCart/application-lte",
+  authMiddleware,
+  retrieveApplicationLteRoutes
 );
 
 app.use(
