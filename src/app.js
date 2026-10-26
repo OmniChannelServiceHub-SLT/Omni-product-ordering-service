@@ -11,11 +11,29 @@ const errorMiddleware =
     "./middleware/errorMiddleware"
   );
 
-const packageActivationRoutes =
-  require(
-    "./APIs/createPackageActivation/routes/packageActivationRoutes"
-  );
+const listProductOrderBuyRoutes = require(
+  "./APIs/listProductOrderBuy/routes/listProductOrderBuyRoutes"
+);
 
+const confirmPurchaseExtraRoutes = require(
+  "./APIs/confirmPurchaseExtra/routes/confirmPurchaseExtraRoutes"
+);
+
+const orderBuyAdvReportsRoutes = require(
+  "./APIs/orderBuyAdvReports/routes/orderBuyAdvReportsRoutes"
+);
+
+const orderUnsubscribeAdvRoutes = require(
+  "./APIs/orderUnsubscribeAdv/routes/orderUnsubscribeAdvRoutes"
+);
+
+const orderDataGiftEnrollRoutes = require(
+  "./APIs/orderDataGiftEnroll/routes/orderDataGiftEnrollRoutes"
+);
+
+const validateDataGiftRoutes = require(
+  "./APIs/validateDataGift/routes/validateDataGiftRoutes"
+);
 
 const app =
   express();
@@ -40,15 +58,35 @@ app.get(
   }
 );
 
-
 app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/package-activation",
-
-  validationMiddleware,
-
-  packageActivationRoutes
+  "/tmf-api/productOrderingManagement/v4/productOrder/listProductOrderBuy",
+  listProductOrderBuyRoutes
 );
 
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/confirmPurchaseExtra",
+  confirmPurchaseExtraRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderBuyAdvReports",
+  orderBuyAdvReportsRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderUnsubscribeAdv",
+  orderUnsubscribeAdvRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderDataGiftEnroll",
+  orderDataGiftEnrollRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/validateDataGift",
+  validateDataGiftRoutes
+);
 
 /*
  * 404 handler
