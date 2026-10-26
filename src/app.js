@@ -39,6 +39,10 @@ const createApplicationRoutes = require(
   "./APIs/createApplication/routes/createApplicationRoutes"
 );
 
+const patchApplicationRoutes = require(
+  "./APIs/patchApplication/routes/patchApplicationRoutes"
+);
+
 const app =
   express();
 
@@ -95,6 +99,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/createApplication",
   createApplicationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/patchApplication",
+  patchApplicationRoutes
 );
 
 /*
