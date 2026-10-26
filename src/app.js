@@ -25,6 +25,12 @@ const listCustConfirmationRoutes = require(
 const packageActivationRoutes = require(
   "./APIs/createPackageActivation/routes/packageActivationRoutes"
 );
+const {
+  patchRouter: patchApplicationLteRoutes,
+  legacyPostRouter: patchApplicationLteLegacyRoutes
+} = require(
+  "./APIs/PatchApplicationLte/routes/patchApplicationLteRoutes"
+);
 const upgradeLoyaltyRoutes = require(
   "./APIs/UpgradeLoyalty/routes/upgradeLoyaltyRoutes"
 );
@@ -90,6 +96,27 @@ app.use(
   authMiddleware,
   validationMiddleware,
   createApplicationLteRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v1/shoppingCart/application-lte",
+  authMiddleware,
+  validationMiddleware,
+  patchApplicationLteRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v4/shoppingCart/application-lte",
+  authMiddleware,
+  validationMiddleware,
+  patchApplicationLteRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v1/shoppingCart/application-lte/patch",
+  authMiddleware,
+  validationMiddleware,
+  patchApplicationLteLegacyRoutes
 );
 
 app.use(

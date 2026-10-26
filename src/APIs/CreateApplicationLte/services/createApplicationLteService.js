@@ -290,8 +290,11 @@ async function createApplicationLte({
 
 module.exports = {
   createApplicationLte,
+  FIELD_DEFINITIONS,
+  readField,
   normalizeInput,
   validateInput,
+  buildProductCharacteristics,
   buildShoppingCart,
   buildTmfResponse,
   buildLegacyResponse
