@@ -35,6 +35,30 @@ const validateDataGiftRoutes = require(
   "./APIs/validateDataGift/routes/validateDataGiftRoutes"
 );
 
+const createApplicationRoutes = require(
+  "./APIs/createApplication/routes/createApplicationRoutes"
+);
+
+const patchApplicationRoutes = require(
+  "./APIs/patchApplication/routes/patchApplicationRoutes"
+);
+
+const orderPurchasedRoutes = require(
+  "./APIs/orderPurchased/routes/orderPurchasedRoutes"
+);
+
+const generateApplicationRoutes = require(
+  "./APIs/generateApplication/routes/generateApplicationRoutes"
+);
+
+const retrievePurchaseRoutes = require(
+  "./APIs/retrievePurchase/routes/retrievePurchaseRoutes"
+);
+
+const retrieveApplicationRoutes = require(
+  "./APIs/retrieveApplication/routes/retrieveApplicationRoutes"
+);
+
 const app =
   express();
 
@@ -86,6 +110,36 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/validateDataGift",
   validateDataGiftRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/createApplication",
+  createApplicationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/patchApplication",
+  patchApplicationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderPurchased",
+  orderPurchasedRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/generateApplication",
+  generateApplicationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/retrievePurchase",
+  retrievePurchaseRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/retrieveApplication",
+  retrieveApplicationRoutes
 );
 
 /*
