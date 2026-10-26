@@ -19,6 +19,9 @@ const createApplicationLteRoutes = require(
 const createOfferingRoutes = require(
   "./APIs/CreateOffering/routes/createOfferingRoutes"
 );
+const happyDayRoutes = require(
+  "./APIs/HappyDay/routes/happyDayRoutes"
+);
 const listAccountLinkRoutes = require(
   "./APIs/ListAccountLink/routes/listAccountLinkRoutes"
 );
@@ -77,6 +80,20 @@ app.use(
   authMiddleware,
   validationMiddleware,
   orderPackageRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v1/productOrder/happy-day",
+  authMiddleware,
+  validationMiddleware,
+  happyDayRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/happy-day",
+  authMiddleware,
+  validationMiddleware,
+  happyDayRoutes
 );
 
 app.use(
