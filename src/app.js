@@ -43,6 +43,10 @@ const patchApplicationRoutes = require(
   "./APIs/patchApplication/routes/patchApplicationRoutes"
 );
 
+const orderPurchasedRoutes = require(
+  "./APIs/orderPurchased/routes/orderPurchasedRoutes"
+);
+
 const app =
   express();
 
@@ -104,6 +108,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/patchApplication",
   patchApplicationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderPurchased",
+  orderPurchasedRoutes
 );
 
 /*
