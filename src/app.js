@@ -47,6 +47,10 @@ const orderPurchasedRoutes = require(
   "./APIs/orderPurchased/routes/orderPurchasedRoutes"
 );
 
+const generateApplicationRoutes = require(
+  "./APIs/generateApplication/routes/generateApplicationRoutes"
+);
+
 const app =
   express();
 
@@ -113,6 +117,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/orderPurchased",
   orderPurchasedRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/generateApplication",
+  generateApplicationRoutes
 );
 
 /*
