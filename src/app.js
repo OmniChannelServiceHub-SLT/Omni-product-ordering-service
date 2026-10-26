@@ -35,6 +35,10 @@ const validateDataGiftRoutes = require(
   "./APIs/validateDataGift/routes/validateDataGiftRoutes"
 );
 
+const createApplicationRoutes = require(
+  "./APIs/createApplication/routes/createApplicationRoutes"
+);
+
 const app =
   express();
 
@@ -86,6 +90,11 @@ app.use(
 app.use(
   "/tmf-api/productOrderingManagement/v4/productOrder/validateDataGift",
   validateDataGiftRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/createApplication",
+  createApplicationRoutes
 );
 
 /*
