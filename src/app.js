@@ -11,11 +11,6 @@ const errorMiddleware =
     "./middleware/errorMiddleware"
   );
 
-const packageActivationRoutes =
-  require(
-    "./APIs/createPackageActivation/routes/packageActivationRoutes"
-  );
-
 
 const app =
   express();
@@ -38,15 +33,6 @@ app.get(
           "product-ordering-service"
       });
   }
-);
-
-
-app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/package-activation",
-
-  validationMiddleware,
-
-  packageActivationRoutes
 );
 
 
