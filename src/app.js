@@ -11,6 +11,10 @@ const errorMiddleware =
     "./middleware/errorMiddleware"
   );
 
+const listProductOrderBuyRoutes = require(
+  "./APIs/listProductOrderBuy/routes/listProductOrderBuyRoutes"
+);
+
 
 const app =
   express();
@@ -35,6 +39,10 @@ app.get(
   }
 );
 
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/listProductOrderBuy",
+  listProductOrderBuyRoutes
+);
 
 /*
  * 404 handler
