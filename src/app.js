@@ -16,6 +16,9 @@ const bbPackageChangeRequestRoutes = require(
 const createApplicationLteRoutes = require(
   "./APIs/CreateApplicationLte/routes/createApplicationLteRoutes"
 );
+const createOfferingRoutes = require(
+  "./APIs/CreateOffering/routes/createOfferingRoutes"
+);
 const listAccountLinkRoutes = require(
   "./APIs/ListAccountLink/routes/listAccountLinkRoutes"
 );
@@ -138,6 +141,20 @@ app.use(
   "/tmf-api/productOfferingQualification/v1/productOfferingQualification/account-link",
   authMiddleware,
   listAccountLinkRoutes
+);
+
+app.use(
+  "/tmf-api/productOfferingQualification/v1/productOfferingQualification/offering",
+  authMiddleware,
+  validationMiddleware,
+  createOfferingRoutes
+);
+
+app.use(
+  "/tmf-api/productOfferingQualification/v4/productOfferingQualification/offering",
+  authMiddleware,
+  validationMiddleware,
+  createOfferingRoutes
 );
 
 app.use(
