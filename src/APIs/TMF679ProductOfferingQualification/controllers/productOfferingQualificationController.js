@@ -58,6 +58,22 @@ function selectFields(value, fields) {
     }, {});
 }
 
+function containsUnsupportedParameter(value) {
+  if (Array.isArray(value)) {
+    return value.some(containsUnsupportedParameter);
+  }
+
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(value, "isRef")) {
+    return true;
+  }
+
+  return Object.values(value).some(containsUnsupportedParameter);
+}
+
 async function createQualification(req, res, next) {
   try {
     if (!Array.isArray(req.body.productOfferingQualificationItem)) {
@@ -65,6 +81,10 @@ async function createQualification(req, res, next) {
         400,
         "productOfferingQualificationItem must be an array"
       );
+    }
+
+    if (containsUnsupportedParameter(req.body)) {
+      throw error(400, "Unexpected parameter: isRef");
     }
 
     const saved = await ProductOfferingQualification.create({

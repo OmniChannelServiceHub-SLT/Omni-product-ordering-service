@@ -151,6 +151,27 @@ test("TMF679 root returns ProductOfferingQualification resources", async () => {
   assert.equal(retrieved.body.id, created.body.id);
 });
 
+test("TMF679 rejects the CTK unsupported isRef parameter", async () => {
+  const result = await request(
+    "/tmf-api/productOfferingQualificationManagement/v4/productOfferingQualification",
+    "POST",
+    {
+      productOfferingQualificationItem: [
+        {
+          id: "1",
+          product: {
+            relatedPlace: [{ id: "place-1", isRef: true }]
+          }
+        }
+      ]
+    }
+  );
+
+  assert.equal(result.response.status, 400);
+  assert.equal(result.body.reason, "Bad Request");
+  assert.match(result.body.message, /isRef/);
+});
+
 test("TMF663 root returns ShoppingCart resources", async () => {
   const root = "/tmf-api/shoppingCart/v4/shoppingCart";
   const created = await request(root, "POST", {
