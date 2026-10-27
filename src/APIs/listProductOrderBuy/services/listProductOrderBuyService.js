@@ -1,4 +1,18 @@
+const ProductOrder = require("../../../models/TMF622_ProductOrder");
+
+const BASE_PATH = "/tmf-api/productOrderingManagement/v4/productOrder";
+
+// Fields stored in MongoDB that must not be shown in the TMF response
+const HIDDEN_FIELDS = ["_id", "__v", "createdAt", "updatedAt", "legacyOperation", "legacyPayload"];
+
+function createError(status, message) {
+    const error = new Error(message);
+    error.status = status;
+    return error;
+}
+
 function validateInput(query = {}) {
+    // Required query parameters from the Excel (A50 - GetPurchaseHistory)
     const requiredFields = [
         "subscriberID",
         "historyFrom",
@@ -13,63 +27,77 @@ function validateInput(query = {}) {
     );
 
     if (missingFields.length > 0) {
-        const error = new Error(
+        throw createError(
+            400,
             `Missing required query parameter(s): ${missingFields.join(", ")}`
         );
-
-        error.status = 400;
-        throw error;
     }
+}
+
+/*
+ * Turn "2020-10-20" or "2020-10-20 00:00:00" into a Date.
+ * If only a date is given for historyTo, use the end of that day.
+ */
+function parseDate(value, fieldName, endOfDay) {
+    const text = String(value).trim();
+    const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(text);
+
+    const date = dateOnly
+        ? new Date(`${text}T${endOfDay ? "23:59:59.999" : "00:00:00.000"}Z`)
+        : new Date(text.replace(" ", "T") + (text.endsWith("Z") ? "" : "Z"));
+
+    if (Number.isNaN(date.getTime())) {
+        throw createError(400, `${fieldName} must be a valid date, e.g. 2020-10-20`);
+    }
+
+    return date;
+}
+
+/*
+ * Convert a saved MongoDB document into a TMF622 ProductOrder
+ */
+function toProductOrder(doc) {
+    const order = doc.toObject();
+    const id = String(order._id);
+
+    const result = {
+        id,
+        href: `${BASE_PATH}/${id}`
+    };
+
+    for (const key of Object.keys(order)) {
+        if (!HIDDEN_FIELDS.includes(key)) {
+            result[key] = order[key];
+        }
+    }
+
+    result["@type"] = "ProductOrder";
+
+    return result;
 }
 
 async function listProductOrderBuy(query) {
     validateInput(query);
 
     const subscriberID = String(query.subscriberID).trim();
+    const from = parseDate(query.historyFrom, "historyFrom", false);
+    const to = parseDate(query.historyTo, "historyTo", true);
 
-    // TODO: Replace this sample data with the real purchase-history
-    // backend call when it is available. The response format below
-    // matches the "MySLT output sample" for A50 in the Excel sheet.
-    return [
-        {
-            purchaseId: "1553186478942404",
-            subscriberId: subscriberID,
-            vasType: "Extra GB",
-            vasPackage: "2 GB",
-            uamCat: null,
-            startTime: null,
-            duration: 0,
-            payType: "PostPaid",
-            payPrice: "250",
-            transactionState: null,
-            transactionTime: "2019-03-21 22:11",
-            commitUser: "SLT",
-            channel: null,
-            provisioningString: null,
-            basePackage: null,
-            failReason: null,
-            payParameters: null
-        },
-        {
-            purchaseId: "1553186607004273",
-            subscriberId: subscriberID,
-            vasType: "Extra GB",
-            vasPackage: "5 GB",
-            uamCat: null,
-            startTime: null,
-            duration: 0,
-            payType: "PostPaid",
-            payPrice: "375",
-            transactionState: null,
-            transactionTime: "2019-03-21 22:13",
-            commitUser: "SLT",
-            channel: null,
-            provisioningString: null,
-            basePackage: null,
-            failReason: null,
-            payParameters: null
+    if (from > to) {
+        throw createError(400, "historyFrom must be before historyTo");
+    }
+
+    // TMF622: purchase history = the ProductOrders of this subscriber
+    // whose orderDate is between historyFrom and historyTo
+    const orders = await ProductOrder.find({
+        "relatedParty.id": subscriberID,
+        orderDate: {
+            $gte: from.toISOString(),
+            $lte: to.toISOString()
         }
-    ];
+    }).sort({ orderDate: -1 });
+
+    return orders.map(toProductOrder);
 }
 
 module.exports = { listProductOrderBuy };
