@@ -4,7 +4,7 @@ const ProductOfferingQualification = require(
 
 const {
   isEntitledPrincipal
-} = require("../../ListAccountLink/services/listAccountLinkService");
+} = require("../../listAccountLink/services/listAccountLinkService");
 
 const TMF_BASE_PATH =
   "/tmf-api/productOfferingQualification/v4/productOfferingQualification";

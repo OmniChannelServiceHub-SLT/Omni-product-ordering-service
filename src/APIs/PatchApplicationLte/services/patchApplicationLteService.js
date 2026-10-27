@@ -6,7 +6,7 @@ const {
   normalizeInput,
   readField
 } = require(
-  "../../CreateApplicationLte/services/createApplicationLteService"
+  "../../createApplicationLte/services/createApplicationLteService"
 );
 
 const PRIVILEGED_ROLES = new Set([

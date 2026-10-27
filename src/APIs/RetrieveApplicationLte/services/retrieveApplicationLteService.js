@@ -3,13 +3,13 @@ const ShoppingCart = require("../../../models/TMF663_ShoppingCart");
 const {
   buildTmfResponse
 } = require(
-  "../../CreateApplicationLte/services/createApplicationLteService"
+  "../../createApplicationLte/services/createApplicationLteService"
 );
 const {
   isAuthorized,
   normalizeReference
 } = require(
-  "../../PatchApplicationLte/services/patchApplicationLteService"
+  "../../patchApplicationLte/services/patchApplicationLteService"
 );
 
 function httpError(statusCode, message) {

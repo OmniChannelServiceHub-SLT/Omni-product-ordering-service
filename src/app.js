@@ -5,31 +5,31 @@ const errorMiddleware = require("./middleware/errorMiddleware");
 const validationMiddleware = require("./middleware/validationMiddleware");
 
 const addVASDataBundlePostPaidRoutes = require(
-  "./APIs/AddVASDataBundlePostPaid/routes/addVASDataBundlePostPaidRoutes"
+  "./APIs/orderAddVasBundle/routes/addVASDataBundlePostPaidRoutes"
 );
 const addVASDataBundlePrepaidInitRoutes = require(
-  "./APIs/AddVASDataBundlePrepaidInit/routes/addVASDataBundlePrepaidInitRoutes"
+  "./APIs/orderAddVasBundleInit/routes/addVASDataBundlePrepaidInitRoutes"
 );
 const bbPackageChangeRequestRoutes = require(
-  "./APIs/BBPackageChangeRequest/routes/bbPackageChangeRequestRoutes"
+  "./APIs/orderBbPackageChange/routes/bbPackageChangeRequestRoutes"
 );
 const createApplicationLteRoutes = require(
-  "./APIs/CreateApplicationLte/routes/createApplicationLteRoutes"
+  "./APIs/createApplicationLte/routes/createApplicationLteRoutes"
 );
 const createOfferingRoutes = require(
-  "./APIs/CreateOffering/routes/createOfferingRoutes"
+  "./APIs/createOffering/routes/createOfferingRoutes"
 );
 const happyDayRoutes = require(
-  "./APIs/HappyDay/routes/happyDayRoutes"
+  "./APIs/selectHappyDay/routes/happyDayRoutes"
 );
 const listAccountLinkRoutes = require(
-  "./APIs/ListAccountLink/routes/listAccountLinkRoutes"
+  "./APIs/listAccountLink/routes/listAccountLinkRoutes"
 );
 const listCustConfirmationRoutes = require(
   "./APIs/ListCustConfirmation/routes/listCustConfirmationRoutes"
 );
 const orderPackageRoutes = require(
-  "./APIs/OrderPackage/routes/orderPackageRoutes"
+  "./APIs/orderPackage/routes/orderPackageRoutes"
 );
 const packageActivationRoutes = require(
   "./APIs/createPackageActivation/routes/packageActivationRoutes"
@@ -38,13 +38,13 @@ const {
   patchRouter: patchApplicationLteRoutes,
   legacyPostRouter: patchApplicationLteLegacyRoutes
 } = require(
-  "./APIs/PatchApplicationLte/routes/patchApplicationLteRoutes"
+  "./APIs/patchApplicationLte/routes/patchApplicationLteRoutes"
 );
 const retrieveApplicationLteRoutes = require(
-  "./APIs/RetrieveApplicationLte/routes/retrieveApplicationLteRoutes"
+  "./APIs/retrieveApplicationLte/routes/retrieveApplicationLteRoutes"
 );
 const upgradeLoyaltyRoutes = require(
-  "./APIs/UpgradeLoyalty/routes/upgradeLoyaltyRoutes"
+  "./APIs/requestLoyalty/routes/upgradeLoyaltyRoutes"
 );
 const productOrderRoutes = require(
   "./APIs/TMF622ProductOrder/routes/productOrderRoutes"

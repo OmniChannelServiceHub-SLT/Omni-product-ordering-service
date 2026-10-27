@@ -4,7 +4,7 @@ const {
 
 const {
   isEntitledPrincipal
-} = require("../../ListAccountLink/services/listAccountLinkService");
+} = require("../../listAccountLink/services/listAccountLinkService");
 
 const TMF_BASE_PATH =
   "/tmf-api/productOrderingManagement/v4/productOrder";
