@@ -5,7 +5,9 @@ async function patchApplicationController(req, res) {
         // Accept inputs from the query string (as in the Excel) or the JSON body
         const input = {
             ...(req.query || {}),
-            ...(req.body || {})
+            ...(req.body || {}),
+            // TMF style: the cart id (REF_NO) comes from the URL
+            REF_NO: req.params.REF_NO
         };
 
         const result = await service.patchApplication(input);
