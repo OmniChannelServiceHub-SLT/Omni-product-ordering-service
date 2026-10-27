@@ -140,7 +140,7 @@ app.use(
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/generateApplication",
+  "/tmf-api/shoppingCart/v4/shoppingCart/generate-application",
   generateApplicationRoutes
 );
 
