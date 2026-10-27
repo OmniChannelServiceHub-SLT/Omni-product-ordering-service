@@ -19,7 +19,9 @@ async function patchApplicationController(req, res) {
             reason:
                 status === 400
                     ? "Bad Request"
-                    : "Internal Server Error",
+                    : status === 404
+                        ? "Not Found"
+                        : "Internal Server Error",
             message: error.message || "Failed to update draft application",
             status: String(status),
             "@type": "Error"

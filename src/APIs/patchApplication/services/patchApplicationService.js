@@ -1,5 +1,14 @@
 // A118 - UpdateDraftData (patchApplication)
-// Inputs and output follow the Excel "MySLT input" and "MySLT output sample".
+// Inputs follow the Excel "MySLT input". Output is the updated TMF663 ShoppingCart.
+
+const mongoose = require("mongoose");
+const ShoppingCart = require("../../../models/TMF663_ShoppingCart");
+
+// Reuse the same Excel -> TMF663 mapping as A111, so both save the cart the same way
+const {
+    buildShoppingCart,
+    toShoppingCart
+} = require("../../createApplication/services/createApplicationService");
 
 // All 37 input fields from the Excel
 const ALL_FIELDS = [
@@ -69,20 +78,52 @@ function validateInput(data = {}) {
     }
 }
 
+function notFound(refNo) {
+    const error = new Error(`Draft application with REF_NO ${refNo} not found`);
+    error.status = 404;
+    return error;
+}
+
 async function patchApplication(input) {
     validateInput(input);
 
-    // TODO: Replace this with the real draft-update backend call when it is
-    // available. The response format below matches the "MySLT output sample"
-    // for A118 in the Excel sheet.
-    return {
-        isSuccess: true,
-        errorMessege: null,
-        exceptionDetail: null,
-        dataBundle: {},
-        errorShow: null,
-        errorCode: null
-    };
+    // REF_NO is the ShoppingCart id returned by A111 createApplication
+    const refNo = String(input.REF_NO).trim();
+
+    if (!mongoose.isValidObjectId(refNo)) {
+        throw notFound(refNo);
+    }
+
+    const cart = buildShoppingCart(input);
+
+    // The 2 extra A118 fields are kept as characteristics on the first cart item
+    if (cart.cartItem.length > 0) {
+        cart.cartItem[0].product.productCharacteristic.push(
+            { name: "SLTNIC", value: String(input.SLTNIC).trim() },
+            { name: "LOOP_AVAILABLITY", value: String(input.LOOP_AVAILABLITY).trim() }
+        );
+    }
+
+    // TMF663: updating a draft application = updating the existing ShoppingCart.
+    // TODO: Also send the update to the real NewCon backend when it is available.
+    const updated = await ShoppingCart.findOneAndUpdate(
+        { _id: refNo, status: "active" },
+        {
+            $set: {
+                ...cart,
+                // Keep the original Excel request, so we know where this change came from
+                legacyOperation: "UpdateDraftData",
+                legacyPayload: input
+            }
+        },
+        { returnDocument: "after" }
+    );
+
+    if (!updated) {
+        throw notFound(refNo);
+    }
+
+    return toShoppingCart(updated);
 }
 
 module.exports = { patchApplication };
