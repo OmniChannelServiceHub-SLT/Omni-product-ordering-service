@@ -46,6 +46,15 @@ const retrieveApplicationLteRoutes = require(
 const upgradeLoyaltyRoutes = require(
   "./APIs/UpgradeLoyalty/routes/upgradeLoyaltyRoutes"
 );
+const productOrderRoutes = require(
+  "./APIs/TMF622ProductOrder/routes/productOrderRoutes"
+);
+const shoppingCartRoutes = require(
+  "./APIs/TMF663ShoppingCart/routes/shoppingCartRoutes"
+);
+const productOfferingQualificationRoutes = require(
+  "./APIs/TMF679ProductOfferingQualification/routes/productOfferingQualificationRoutes"
+);
 
 const app = express();
 
@@ -104,7 +113,21 @@ app.use(
 );
 
 app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/add-vas-data-bundle-postpaid",
+  authMiddleware,
+  validationMiddleware,
+  addVASDataBundlePostPaidRoutes
+);
+
+app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/add-vas-data-bundle-prepaid-init",
+  authMiddleware,
+  validationMiddleware,
+  addVASDataBundlePrepaidInitRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/add-vas-data-bundle-prepaid-init",
   authMiddleware,
   validationMiddleware,
   addVASDataBundlePrepaidInitRoutes
@@ -118,7 +141,21 @@ app.use(
 );
 
 app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/bb-package-change-request",
+  authMiddleware,
+  validationMiddleware,
+  bbPackageChangeRequestRoutes
+);
+
+app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/upgrade-loyalty",
+  authMiddleware,
+  validationMiddleware,
+  upgradeLoyaltyRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/upgrade-loyalty",
   authMiddleware,
   validationMiddleware,
   upgradeLoyaltyRoutes
@@ -202,6 +239,34 @@ app.use(
   "/tmf-api/productOfferingQualification/v4/productOfferingQualification/account-link",
   authMiddleware,
   listAccountLinkRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder",
+  authMiddleware,
+  validationMiddleware,
+  productOrderRoutes
+);
+
+app.use(
+  "/tmf-api/productOfferingQualificationManagement/v4/productOfferingQualification",
+  authMiddleware,
+  validationMiddleware,
+  productOfferingQualificationRoutes
+);
+
+app.use(
+  "/tmf-api/productOfferingQualification/v4/productOfferingQualification",
+  authMiddleware,
+  validationMiddleware,
+  productOfferingQualificationRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v4/shoppingCart",
+  authMiddleware,
+  validationMiddleware,
+  shoppingCartRoutes
 );
 
 app.use((req, res) => {
