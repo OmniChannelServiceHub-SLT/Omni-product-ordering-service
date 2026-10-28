@@ -25,14 +25,8 @@ const happyDayRoutes = require(
 const listAccountLinkRoutes = require(
   "./APIs/listAccountLink/routes/listAccountLinkRoutes"
 );
-const listCustConfirmationRoutes = require(
-  "./APIs/ListCustConfirmation/routes/listCustConfirmationRoutes"
-);
 const orderPackageRoutes = require(
   "./APIs/orderPackage/routes/orderPackageRoutes"
-);
-const packageActivationRoutes = require(
-  "./APIs/createPackageActivation/routes/packageActivationRoutes"
 );
 const {
   patchRouter: patchApplicationLteRoutes,
@@ -55,6 +49,42 @@ const shoppingCartRoutes = require(
 const productOfferingQualificationRoutes = require(
   "./APIs/TMF679ProductOfferingQualification/routes/productOfferingQualificationRoutes"
 );
+const listProductOrderBuyRoutes = require(
+  "./APIs/listProductOrderBuy/routes/listProductOrderBuyRoutes"
+);
+const confirmPurchaseExtraRoutes = require(
+  "./APIs/confirmPurchaseExtra/routes/confirmPurchaseExtraRoutes"
+);
+const orderBuyAdvReportsRoutes = require(
+  "./APIs/orderBuyAdvReports/routes/orderBuyAdvReportsRoutes"
+);
+const orderUnsubscribeAdvRoutes = require(
+  "./APIs/orderUnsubscribeAdv/routes/orderUnsubscribeAdvRoutes"
+);
+const orderDataGiftEnrollRoutes = require(
+  "./APIs/orderDataGiftEnroll/routes/orderDataGiftEnrollRoutes"
+);
+const validateDataGiftRoutes = require(
+  "./APIs/validateDataGift/routes/validateDataGiftRoutes"
+);
+const createApplicationRoutes = require(
+  "./APIs/createApplication/routes/createApplicationRoutes"
+);
+const patchApplicationRoutes = require(
+  "./APIs/patchApplication/routes/patchApplicationRoutes"
+);
+const orderPurchasedRoutes = require(
+  "./APIs/orderPurchased/routes/orderPurchasedRoutes"
+);
+const generateApplicationRoutes = require(
+  "./APIs/generateApplication/routes/generateApplicationRoutes"
+);
+const retrievePurchaseRoutes = require(
+  "./APIs/retrievePurchase/routes/retrievePurchaseRoutes"
+);
+const retrieveApplicationRoutes = require(
+  "./APIs/retrieveApplication/routes/retrieveApplicationRoutes"
+);
 
 const app = express();
 
@@ -70,12 +100,6 @@ app.get("/health", (req, res) => {
     service: "product-ordering-service"
   });
 });
-
-app.use(
-  "/tmf-api/productOrderingManagement/v1/productOrder/package-activation",
-  validationMiddleware,
-  packageActivationRoutes
-);
 
 app.use(
   "/tmf-api/productOrderingManagement/v1/productOrder/order-package",
@@ -229,16 +253,69 @@ app.use(
 );
 
 app.use(
-  "/tmf-api/productOfferingQualification/v1/productOfferingQualification",
-  authMiddleware,
-  validationMiddleware,
-  listCustConfirmationRoutes
-);
-
-app.use(
   "/tmf-api/productOfferingQualification/v4/productOfferingQualification/account-link",
   authMiddleware,
   listAccountLinkRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/listProductOrderBuy",
+  listProductOrderBuyRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/confirmPurchaseExtra",
+  confirmPurchaseExtraRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderBuyAdvReports",
+  orderBuyAdvReportsRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderUnsubscribeAdv",
+  orderUnsubscribeAdvRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderDataGiftEnroll",
+  orderDataGiftEnrollRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/validateDataGift",
+  validateDataGiftRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/createApplication",
+  createApplicationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/patchApplication",
+  patchApplicationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/orderPurchased",
+  orderPurchasedRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/generateApplication",
+  generateApplicationRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/retrievePurchase",
+  retrievePurchaseRoutes
+);
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder/retrieveApplication",
+  retrieveApplicationRoutes
 );
 
 app.use(
