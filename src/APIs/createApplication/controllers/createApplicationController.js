@@ -10,7 +10,7 @@ async function createApplicationController(req, res) {
 
         const result = await service.createApplication(input);
 
-        return res.status(200).json(result);
+        return res.status(201).json(result);
     } catch (error) {
         const status = error.status || 500;
 

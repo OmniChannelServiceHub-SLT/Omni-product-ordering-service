@@ -5,6 +5,6 @@ const {
     patchApplicationController
 } = require("../controllers/patchApplicationController");
 
-router.post("/", patchApplicationController);
+router.patch("/:REF_NO", patchApplicationController);
 
 module.exports = router;

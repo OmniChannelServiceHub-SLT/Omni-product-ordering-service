@@ -59,6 +59,18 @@ const retrieveApplicationRoutes = require(
   "./APIs/retrieveApplication/routes/retrieveApplicationRoutes"
 );
 
+const productOrderRoutes = require(
+  "./APIs/TMF622ProductOrder/routes/productOrderRoutes"
+);
+
+const shoppingCartRoutes = require(
+  "./APIs/TMF663ShoppingCart/routes/shoppingCartRoutes"
+);
+
+const productOfferingQualificationRoutes = require(
+  "./APIs/TMF679ProductOfferingQualification/routes/productOfferingQualificationRoutes"
+);
+
 const app =
   express();
 
@@ -83,63 +95,83 @@ app.get(
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/listProductOrderBuy",
+  "/tmf-api/productOrderingManagement/v4/productOrder/list-product-order-buy",
   listProductOrderBuyRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/confirmPurchaseExtra",
+  "/tmf-api/productOrderingManagement/v4/productOrder/confirm-purchase-extra",
   confirmPurchaseExtraRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/orderBuyAdvReports",
+  "/tmf-api/productOrderingManagement/v4/productOrder/order-buy-adv-reports",
   orderBuyAdvReportsRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/orderUnsubscribeAdv",
+  "/tmf-api/productOrderingManagement/v4/productOrder/order-unsubscribe-adv",
   orderUnsubscribeAdvRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/orderDataGiftEnroll",
+  "/tmf-api/productOrderingManagement/v4/productOrder/order-data-gift-enroll",
   orderDataGiftEnrollRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/validateDataGift",
+  "/tmf-api/productOfferingQualification/v4/productOfferingQualification/validate-data-gift",
   validateDataGiftRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/createApplication",
+  "/tmf-api/shoppingCart/v4/shoppingCart/application",
   createApplicationRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/patchApplication",
+  "/tmf-api/shoppingCart/v4/shoppingCart/application",
   patchApplicationRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/orderPurchased",
+  "/tmf-api/productOrderingManagement/v4/productOrder/order-purchased",
   orderPurchasedRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/generateApplication",
+  "/tmf-api/shoppingCart/v4/shoppingCart/generate-application",
   generateApplicationRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/retrievePurchase",
+  "/tmf-api/productOfferingQualification/v4/productOfferingQualification/retrieve-purchase",
   retrievePurchaseRoutes
 );
 
 app.use(
-  "/tmf-api/productOrderingManagement/v4/productOrder/retrieveApplication",
+  "/tmf-api/shoppingCart/v4/shoppingCart/application",
   retrieveApplicationRoutes
+);
+
+/*
+ * TMF standard endpoints (used by the CTKs)
+ * Keep these AFTER the API routes above
+ */
+
+app.use(
+  "/tmf-api/productOrderingManagement/v4/productOrder",
+  productOrderRoutes
+);
+
+app.use(
+  "/tmf-api/productOfferingQualification/v4/productOfferingQualification",
+  productOfferingQualificationRoutes
+);
+
+app.use(
+  "/tmf-api/shoppingCart/v4/shoppingCart",
+  shoppingCartRoutes
 );
 
 /*
