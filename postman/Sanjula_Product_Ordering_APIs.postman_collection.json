@@ -1,0 +1,223 @@
+{
+  "info": {
+    "_postman_id": "ed3b1974-dff5-4d20-9b87-a81f6deef711",
+    "name": "Sanjula Product Ordering APIs - IAM JWT + TMF",
+    "description": "Tests A61, A66, A67, A77, A79, A127, A141, A142, A143, A169 and A170. Run the IAM Login request first, or run the entire collection in order. The LTE requests automatically chain the reference returned by A141.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.collectionVariables.get('runId')) {",
+          "  pm.collectionVariables.set('runId', Date.now().toString());",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    { "key": "productBaseUrl", "value": "http://localhost:3009" },
+    { "key": "iamBaseUrl", "value": "http://localhost:3001" },
+    { "key": "iamUsername", "value": "", "type": "string" },
+    { "key": "iamPassword", "value": "", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "telephoneNo", "value": "0112488102" },
+    { "key": "subscriberID", "value": "0112488102" },
+    { "key": "commitUser", "value": "postman-ctk" },
+    { "key": "packageId", "value": "1" },
+    { "key": "lteRef", "value": "" },
+    { "key": "runId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "00 Authentication",
+      "item": [
+        {
+          "name": "IAM Login - automatically save JWT",
+          "auth": { "type": "noauth" },
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"Username\": \"{{iamUsername}}\",\n  \"Password\": \"{{iamPassword}}\"\n}" },
+            "url": "{{iamBaseUrl}}/internal-api/iam/v4/auth/login",
+            "description": "Uses the unchanged IAM service. Set iamUsername and iamPassword before running. The user must be ACTIVE."
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('IAM login returns 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('IAM returns an access token', () => pm.expect(body.accessToken).to.be.a('string').and.not.empty);",
+              "if (body.accessToken) pm.collectionVariables.set('accessToken', body.accessToken);",
+              "if (body.refreshToken) pm.collectionVariables.set('refreshToken', body.refreshToken);"
+            ]}
+          }]
+        }
+      ]
+    },
+    {
+      "name": "TMF679 Product Offering Qualification",
+      "item": [
+        {
+          "name": "A127 listAccountLink",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{productBaseUrl}}/tmf-api/productOfferingQualification/v4/productOfferingQualification/account-link?telephoneNo={{telephoneNo}}"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('TMF679 ProductOfferingQualification response', () => { pm.expect(b['@type']).to.eql('ProductOfferingQualification'); pm.expect(b.state).to.eql('done'); pm.expect(b.productOfferingQualificationItem).to.be.an('array'); });"
+          ] } }]
+        },
+        {
+          "name": "A169 createOffering",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"telephoneno\": \"{{telephoneNo}}\",\n  \"channel\": \"OMNI\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/productOfferingQualification/v4/productOfferingQualification/offering"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "pm.test('TMF679 qualification created', () => { pm.expect(b['@type']).to.eql('ProductOfferingQualification'); pm.expect(b.id).to.exist; pm.expect(b.productOfferingQualificationItem).to.be.an('array'); });"
+          ] } }]
+        }
+      ]
+    },
+    {
+      "name": "TMF663 Shopping Cart",
+      "item": [
+        {
+          "name": "A141 createApplicationLte",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"NIC\": \"901234567V\",\n  \"TITLE\": \"Mr\",\n  \"FIRSTNAME\": \"Postman\",\n  \"LASTNAME\": \"Tester\",\n  \"BIRTH_DATE\": \"1990-01-15\",\n  \"SERVICE_TYPE\": \"LTE\",\n  \"MOBILENO\": \"{{telephoneNo}}\",\n  \"EMAIL\": \"postman@example.com\",\n  \"LONGITUDE\": 79.8612,\n  \"LATITUDE\": 6.9271,\n  \"LOOP_AVAILABLITY\": \"Y\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/shoppingCart/v4/shoppingCart/application-lte"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "pm.test('TMF663 ShoppingCart created', () => { pm.expect(b['@type']).to.eql('ShoppingCart'); pm.expect(b.id).to.exist; pm.expect(b.cartItem).to.be.an('array').and.not.empty; });",
+            "if (b.id) pm.collectionVariables.set('lteRef', b.id);"
+          ] } }]
+        },
+        {
+          "name": "A142 patchApplicationLte",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/merge-patch+json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"USER_COMMENT\": \"Updated by Postman run {{runId}}\",\n  \"BILLING_MODE\": \"EMAIL\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/shoppingCart/v4/shoppingCart/application-lte/{{lteRef}}"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('TMF663 ShoppingCart patched', () => { pm.expect(b['@type']).to.eql('ShoppingCart'); pm.expect(b.id).to.eql(pm.collectionVariables.get('lteRef')); });"
+          ] } }]
+        },
+        {
+          "name": "A143 retrieveApplicationLte",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{productBaseUrl}}/tmf-api/shoppingCart/v4/shoppingCart/application-lte/{{lteRef}}"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('TMF663 ShoppingCart retrieved', () => { pm.expect(b['@type']).to.eql('ShoppingCart'); pm.expect(b.id).to.eql(pm.collectionVariables.get('lteRef')); pm.expect(b.cartItem).to.be.an('array'); });"
+          ] } }]
+        }
+      ]
+    },
+    {
+      "name": "TMF622 Product Ordering",
+      "item": [
+        {
+          "name": "A61 selectHappyDay",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"subscriberID\": \"{{subscriberID}}\",\n  \"happydate\": \"2026-12-25\",\n  \"channel\": \"OMNI\",\n  \"commituser\": \"{{commitUser}}\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/productOrderingManagement/v4/productOrder/happy-day"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json(); pm.test('TMF622 ProductOrder returned', () => { pm.expect(b['@type']).to.eql('ProductOrder'); pm.expect(b.productOrderItem).to.be.an('array').and.not.empty; });"
+          ] } }]
+        },
+        {
+          "name": "A66 orderAddVasBundle",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"subscriberID\": \"{{subscriberID}}\",\n  \"packageId\": \"VAS-POSTPAID-1\",\n  \"commitUser\": \"{{commitUser}}\",\n  \"channel\": \"OMNI\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/productOrderingManagement/v4/productOrder/add-vas-data-bundle-postpaid"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201)); const b=pm.response.json(); pm.test('TMF622 ProductOrder returned',()=>{pm.expect(b['@type']).to.eql('ProductOrder');pm.expect(b.id).to.exist;});"
+          ] } }]
+        },
+        {
+          "name": "A67 orderAddVasBundleInit",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"subscriberID\": \"{{subscriberID}}\",\n  \"packageId\": \"VAS-PREPAID-1\",\n  \"commitUser\": \"{{commitUser}}\",\n  \"channel\": \"OMNI\",\n  \"url\": \"https://example.com/postman/callback\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/productOrderingManagement/v4/productOrder/add-vas-data-bundle-prepaid-init"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201)); const b=pm.response.json(); pm.test('TMF622 ProductOrder returned',()=>{pm.expect(b['@type']).to.eql('ProductOrder');pm.expect(b.id).to.exist;});"
+          ] } }]
+        },
+        {
+          "name": "A77 orderBbPackageChange",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"subscriberID\": \"BB-{{runId}}\",\n  \"type\": \"FTTH\",\n  \"name\": \"Postman Tester\",\n  \"nic\": \"901234567V\",\n  \"contactMobile\": \"{{telephoneNo}}\",\n  \"email\": \"postman@example.com\",\n  \"exsistingPackage\": \"Fiber 100\",\n  \"newPackage\": \"Fiber 200\",\n  \"currentMonthlyValue\": 5000,\n  \"newMonthlyValue\": 7000,\n  \"changeType\": \"Upgrade\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/productOrderingManagement/v4/productOrder/bb-package-change-request"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201)); const b=pm.response.json(); pm.test('TMF622 ProductOrder returned',()=>{pm.expect(b['@type']).to.eql('ProductOrder');pm.expect(b.id).to.exist;});"
+          ] } }]
+        },
+        {
+          "name": "A79 requestLoyalty",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"subscriberID\": \"LOYALTY-{{runId}}\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/productOrderingManagement/v4/productOrder/upgrade-loyalty"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201)); const b=pm.response.json(); pm.test('TMF622 ProductOrder returned',()=>{pm.expect(b['@type']).to.eql('ProductOrder');pm.expect(b.id).to.exist;});"
+          ] } }]
+        },
+        {
+          "name": "A170 orderPackage",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"telephoneno\": \"{{telephoneNo}}\",\n  \"packageid\": \"{{packageId}}\",\n  \"receiver\": \"{{telephoneNo}}\",\n  \"channel\": \"OMNI\"\n}" },
+            "url": "{{productBaseUrl}}/tmf-api/productOrderingManagement/v4/productOrder/order-package"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status is 201', () => pm.response.to.have.status(201)); const b=pm.response.json(); pm.test('TMF622 ProductOrder returned',()=>{pm.expect(b['@type']).to.eql('ProductOrder');pm.expect(b.id).to.exist;pm.expect(b.productOrderItem).to.be.an('array');});"
+          ] } }]
+        }
+      ]
+    }
+  ]
+}

@@ -116,6 +116,43 @@ function toStringList(value) {
     .filter(Boolean);
 }
 
+function loadSubscriberEntitlements() {
+  const configured = process.env.SUBSCRIBER_ENTITLEMENTS_JSON;
+
+  if (!configured) {
+    return {};
+  }
+
+  let parsed;
+
+  try {
+    parsed = JSON.parse(configured);
+  } catch (error) {
+    throw httpError(
+      500,
+      "SUBSCRIBER_ENTITLEMENTS_JSON is not valid JSON"
+    );
+  }
+
+  if (!parsed || Array.isArray(parsed) || typeof parsed !== "object") {
+    throw httpError(
+      500,
+      "SUBSCRIBER_ENTITLEMENTS_JSON must be an object keyed by IAM username"
+    );
+  }
+
+  Object.entries(parsed).forEach(([userName, subscribers]) => {
+    if (!Array.isArray(subscribers)) {
+      throw httpError(
+        500,
+        `Subscriber entitlements for ${userName} must be an array`
+      );
+    }
+  });
+
+  return parsed;
+}
+
 function isEntitledPrincipal(principal = {}, telephoneNo) {
   const roles = toStringList(principal.roles).map((role) =>
     role.toUpperCase()
@@ -139,7 +176,23 @@ function isEntitledPrincipal(principal = {}, telephoneNo) {
     .filter((value) => value !== undefined && value !== null)
     .map((value) => String(value).trim());
 
-  return selfIdentifiers.includes(telephoneNo);
+  if (selfIdentifiers.includes(telephoneNo)) {
+    return true;
+  }
+
+  const entitlementIdentifiers = [
+    principal.userName,
+    principal.username
+  ]
+    .filter((value) => value !== undefined && value !== null)
+    .map((value) => String(value).trim());
+  const configuredEntitlements = loadSubscriberEntitlements();
+
+  return entitlementIdentifiers.some((identifier) =>
+    (configuredEntitlements[identifier] || [])
+      .map((value) => String(value).trim())
+      .includes(String(telephoneNo).trim())
+  );
 }
 
 function loadAccountLinks() {
@@ -211,6 +264,7 @@ module.exports = {
   listAccountLink,
   normalizeTelephoneNo,
   isEntitledPrincipal,
+  loadSubscriberEntitlements,
   getAccountLinks,
   buildLegacyResponse,
   buildTmfResponse

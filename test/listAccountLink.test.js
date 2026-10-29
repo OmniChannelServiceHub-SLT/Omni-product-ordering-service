@@ -122,6 +122,24 @@ test("rejects access to another customer's account links", async () => {
   assert.equal(body.reason, "Forbidden");
 });
 
+test("allows an explicitly configured username-to-subscriber entitlement", async () => {
+  process.env.SUBSCRIBER_ENTITLEMENTS_JSON = JSON.stringify({
+    testuser: ["0382222802"]
+  });
+
+  try {
+    const { response, body } = await getAccountLinks({
+      telephoneNo: "0382222802",
+      token: tokenFor("testuser")
+    });
+
+    assert.equal(response.status, 200);
+    assert.equal(body["@type"], "ProductOfferingQualification");
+  } finally {
+    delete process.env.SUBSCRIBER_ENTITLEMENTS_JSON;
+  }
+});
+
 test("requires telephoneNo", async () => {
   const { response, body } = await getAccountLinks({
     token: tokenFor("0382222802")
